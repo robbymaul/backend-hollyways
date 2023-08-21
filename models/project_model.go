@@ -15,6 +15,7 @@ type Project struct {
 	TargetDonation     int       `json:"target" gorm:"type: int"`
 	StartDate          time.Time `json:"startDate" gorm:"type: date"`
 	DueDate            time.Time `json:"dueDate" gorm:"type: date"`
+	Progress           float64   `json:"progress" gorm:"type: float"`
 }
 
 type ProjectResponse struct {

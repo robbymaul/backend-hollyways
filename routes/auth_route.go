@@ -3,14 +3,17 @@ package routes
 import (
 	"hollyways/handlers"
 	"hollyways/packages/connection"
+	middlewareauth "hollyways/packages/middleware"
 	"hollyways/repositories"
 
 	"github.com/gin-gonic/gin"
 )
 
-func AuthRoute(g *gin.RouterGroup) {
+func AuthRoute(r *gin.RouterGroup) {
 	repo := repositories.MakeRepository(connection.DB)
 	handler := handlers.HandlerAuth(repo)
 
-	g.POST("/register", handler.Register)
+	r.POST("/register", handler.Register)
+	r.POST("/login", handler.Login)
+	r.GET("/check-auth", middlewareauth.Auth(), handler.CheckAuth)
 }

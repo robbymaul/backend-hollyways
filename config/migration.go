@@ -10,6 +10,8 @@ func Migration() {
 	err := connection.DB.AutoMigrate(
 		&models.User{},
 		&models.Profile{},
+		&models.Role{},
+		&models.Status{},
 		&models.Transaction{},
 		&models.Project{},
 		&models.Brand{},
