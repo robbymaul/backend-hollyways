@@ -15,15 +15,14 @@ type Result struct {
 	Message string      `json:"message"`
 }
 
+// function authectication user login by JWT
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
 
 		if token == "" {
-			c.JSON(http.StatusUnauthorized, dtoResult.ErrorResult{
-				Status:  http.StatusUnauthorized,
-				Message: "Unauthorized",
-			})
+			c.Set("userLogin", "")
+			c.Next()
 			return
 		}
 

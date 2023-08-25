@@ -10,6 +10,7 @@ import (
 
 var DB *gorm.DB
 
+// function connect to database
 func Database() {
 	var DB_USER = os.Getenv("DB_USER")
 	var DB_PASS = os.Getenv("DB_PASS")

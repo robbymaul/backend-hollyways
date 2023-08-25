@@ -2,6 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
+// models structure database table profiles
 type Profile struct {
 	gorm.Model   `json:"-"`
 	UserID       uint   `json:"user_id" gorm:"type: int(11);constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
@@ -13,6 +14,7 @@ type Profile struct {
 	Address      string `json:"address" gorm:"type: varchar(255)"`
 }
 
+// models response if table joining relation schema
 type ProfileResponse struct {
 	gorm.Model   `json:"-"`
 	UserID       int    `json:"-"`
@@ -24,6 +26,7 @@ type ProfileResponse struct {
 	Address      string `json:"address"`
 }
 
+// function for handle if user has been register auto create profile on table profiles
 func (user *User) AfterCreate(tx *gorm.DB) error {
 	profile := &Profile{
 		UserID: user.ID,
@@ -34,6 +37,7 @@ func (user *User) AfterCreate(tx *gorm.DB) error {
 	return err
 }
 
+// funtion for hande not create new table profiles
 func (ProfileResponse) TableName() string {
 	return "profiles"
 }

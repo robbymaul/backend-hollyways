@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// handler function if user input data file
 func UploadFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		file, err := c.FormFile("image")
@@ -60,6 +61,8 @@ func UploadFile() gin.HandlerFunc {
 				"status":  http.StatusBadRequest,
 				"message": "Unsuported file type",
 			})
+			c.Set("file", "")
+			c.Next()
 			return
 		}
 

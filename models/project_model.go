@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// models structure database table projects
 type Project struct {
 	gorm.Model
 	ProjectName        string    `json:"projectName" gorm:"type: varchar(255)"`
@@ -18,6 +19,7 @@ type Project struct {
 	Progress           float64   `json:"progress" gorm:"type: float"`
 }
 
+// modesl response if table joining relation schema
 type ProjectResponse struct {
 	ProjectName        string    `json:"projectName"`
 	ProjectDescription string    `json:"projectDescription"`
@@ -28,6 +30,7 @@ type ProjectResponse struct {
 	DueDate            time.Time `json:"dueDate"`
 }
 
+// function for handle not create new table
 func (ProjectResponse) TableName() string {
 	return "projects"
 }

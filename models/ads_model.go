@@ -2,6 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
+// model structure database table adses
 type Ads struct {
 	gorm.Model
 	Title       string `json:"title" gorm:"type: varchar(255)"`

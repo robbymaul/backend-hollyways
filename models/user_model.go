@@ -4,6 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// models stucture databse table users
 type User struct {
 	gorm.Model
 	Email    string  `json:"email" gorm:"type: varchar(255);uniqueIndex"`
@@ -16,11 +17,13 @@ type User struct {
 	Profile  Profile `json:"profile"`
 }
 
+// models response if table joining relation schema
 type UserResponse struct {
 	Email    string `json:"email" gorm:"type: varchar(255)"`
 	FullName string `json:"fullname" gorm:"type: varchar(255)"`
 }
 
+// function for handle not create new table users
 func (UserResponse) TableName() string {
 	return "users"
 }

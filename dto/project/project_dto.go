@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// data transfer object request create if admin will be create project donation
 type ProjectRequestDTO struct {
 	ProjectName        string    `json:"projectName" form:"projectName" validate:"required"`
 	ProjectDescription string    `json:"projectDescription" form:"projectDescription" validate:"required"`
@@ -13,6 +14,7 @@ type ProjectRequestDTO struct {
 	DueDate            time.Time `json:"dueDate" form:"dueDate" validate:"required"`
 }
 
+// data transfer object response if success get data project
 type ProjectResponseDTO struct {
 	ID                 int     `json:"id"`
 	ProjectName        string  `json:"projectName"`
@@ -25,6 +27,7 @@ type ProjectResponseDTO struct {
 	Progress           float64 `json:"progress"`
 }
 
+// data transfer object request update if admin will be update project donation
 type ProjectUpdateRequestDTO struct {
 	ProjectName        string    `json:"projectName" form:"projectName"`
 	ProjectDescription string    `json:"projectDescription" form:"projectDescritpion"`

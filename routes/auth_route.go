@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthRoute(r *gin.RouterGroup) {
+func authRoute(r *gin.RouterGroup) {
 	repo := repositories.MakeRepository(connection.DB)
 	handler := handlers.HandlerAuth(repo)
 

@@ -245,8 +245,61 @@ func (h *projectHandler) UpdateProjectByAdmin(c *gin.Context) {
 
 }
 
-func ConvertProjectResponse(p models.Project) projectdto.ProjectResponseDTO {
+// function for handle logic delet project by admin (with gin.context)
+func (h *projectHandler) DeleteProjectByAdmin(c *gin.Context) {
+	userLogin, _ := c.Get("userLogin")
+	userRole := int(userLogin.(jwt.MapClaims)["role"].(float64))
+	if userRole != 1 && userRole != 2 {
+		c.JSON(http.StatusUnauthorized, dtoResult.ErrorResult{
+			Status:  http.StatusUnauthorized,
+			Message: "Unauthorized",
+		})
+		return
+	}
 
+	projectId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
+			Status:  http.StatusBadRequest,
+			Message: "Invalid parameter",
+		})
+		return
+	}
+
+	project, err := h.ProjectRepository.GetProject(projectId)
+	if err != nil {
+		if strings.Contains(err.Error(), "record not found") {
+			c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
+				Status:  http.StatusBadRequest,
+				Message: "id not found",
+			})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, dtoResult.ErrorResult{
+			Status:  http.StatusInternalServerError,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	err = h.ProjectRepository.DeleteProjectByAdmin(project)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, dtoResult.ErrorResult{
+			Status:  http.StatusInternalServerError,
+			Message: "failed to delete project",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "Delete project successfully",
+	})
+}
+
+// function convert response model project with data transfer objct project response
+func ConvertProjectResponse(p models.Project) projectdto.ProjectResponseDTO {
 	return projectdto.ProjectResponseDTO{
 		ID:                 int(p.ID),
 		ProjectName:        p.ProjectName,

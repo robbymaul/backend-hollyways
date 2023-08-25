@@ -7,6 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
+// function to build JWT with signingmethodHS256
 func GenerateToken(claims *jwt.MapClaims) (string, error) {
 	SECRET_KEY := os.Getenv("SECRET_KEY")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -19,6 +20,7 @@ func GenerateToken(claims *jwt.MapClaims) (string, error) {
 	return webtoken, err
 }
 
+// function fo verification if user login with JWT
 func VerifyToken(tokenString string) (*jwt.Token, error) {
 	SECRET_KEY := os.Getenv("SECRET_KEY")
 
@@ -37,6 +39,7 @@ func VerifyToken(tokenString string) (*jwt.Token, error) {
 	return token, err
 }
 
+// function for decode similarity JWT if user has been login
 func DecodeToken(tokenString string) (jwt.MapClaims, error) {
 	token, err := VerifyToken(tokenString)
 	if err != nil {

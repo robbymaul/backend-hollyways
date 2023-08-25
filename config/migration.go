@@ -6,6 +6,7 @@ import (
 	"hollyways/packages/connection"
 )
 
+// function auto migrate model to database
 func Migration() {
 	err := connection.DB.AutoMigrate(
 		&models.User{},

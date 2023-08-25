@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserRoute(r *gin.RouterGroup) {
+func userRoute(r *gin.RouterGroup) {
 	repo := repositories.MakeRepository(connection.DB)
 	handler := handlers.HandlerUser(repo)
 
