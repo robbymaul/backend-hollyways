@@ -4,7 +4,7 @@ import (
 	dtoProfile "hollyways/dto/profile"
 	dtoResult "hollyways/dto/result"
 	"hollyways/repositories"
-	"hollyways/utility"
+	"hollyways/utilities"
 	"html"
 	"net/http"
 
@@ -45,7 +45,7 @@ func (h *profileHandler) UpdateProfileByUser(c *gin.Context) {
 	}
 
 	if request.FirstName != "" {
-		validateFirstName, err := utility.ValidateInput(request.FirstName)
+		validateFirstName, err := utilities.ValidateInput(request.FirstName)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
 				Status:  http.StatusBadRequest,
@@ -57,7 +57,7 @@ func (h *profileHandler) UpdateProfileByUser(c *gin.Context) {
 	}
 
 	if request.LastName != "" {
-		validateLastName, err := utility.ValidateInput(request.LastName)
+		validateLastName, err := utilities.ValidateInput(request.LastName)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
 				Status:  http.StatusBadRequest,

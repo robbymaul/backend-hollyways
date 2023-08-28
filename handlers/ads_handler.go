@@ -6,7 +6,7 @@ import (
 	"hollyways/models"
 	"hollyways/packages/middleware"
 	"hollyways/repositories"
-	"hollyways/utility"
+	"hollyways/utilities"
 	"html"
 	"net/http"
 	"strconv"
@@ -35,7 +35,7 @@ func (h *adsHandler) CreateAds(c *gin.Context) {
 	}
 
 	imageFile, _ := c.Get("file")
-	title, err := utility.ValidateInput(c.PostForm("title"))
+	title, err := utilities.ValidateInput(c.PostForm("title"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
 			Status:  http.StatusBadRequest,
@@ -91,6 +91,14 @@ func (h *adsHandler) FindAds(c *gin.Context) {
 			Message: err.Error(),
 		})
 		return
+	}
+
+	if len(ads) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  http.StatusOK,
+			"message": "No ads data found",
+			"data":    ads,
+		})
 	}
 
 	for _, ads := range ads {
@@ -192,7 +200,7 @@ func (h *adsHandler) UpdateAds(c *gin.Context) {
 	}
 
 	if request.Title != "" {
-		titleValid, err := utility.ValidateInput(request.Title)
+		titleValid, err := utilities.ValidateInput(request.Title)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
 				Status:  http.StatusBadRequest,

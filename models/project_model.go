@@ -21,6 +21,7 @@ type Project struct {
 
 // modesl response if table joining relation schema
 type ProjectResponse struct {
+	gorm.Model         `json:"-"`
 	ProjectName        string    `json:"projectName"`
 	ProjectDescription string    `json:"projectDescription"`
 	ProjectImage       string    `json:"image"`
@@ -28,6 +29,7 @@ type ProjectResponse struct {
 	TargetDonation     int       `json:"target"`
 	StartDate          time.Time `json:"startDate"`
 	DueDate            time.Time `json:"dueDate"`
+	Progress           float64   `json:"-" gorm:"type: float"`
 }
 
 // function for handle not create new table

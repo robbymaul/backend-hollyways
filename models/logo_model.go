@@ -4,8 +4,8 @@ import "gorm.io/gorm"
 
 // model structure database table logos
 type Logo struct {
-	gorm.Model
-	Image string `json:"image" gorm:"type: varchar(255)"`
+	gorm.Model `json:"-"`
+	Image      string `json:"image" gorm:"type: varchar(255)"`
 }
 
 // models response if table joining relation schema

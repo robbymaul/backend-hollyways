@@ -19,8 +19,15 @@ type User struct {
 
 // models response if table joining relation schema
 type UserResponse struct {
-	Email    string `json:"email" gorm:"type: varchar(255)"`
-	FullName string `json:"fullname" gorm:"type: varchar(255)"`
+	gorm.Model `json:"-"`
+	Email      string  `json:"email" gorm:"type: varchar(255)"`
+	Password   string  `json:"-" gorm:"type: varchar(255)"`
+	StatusID   int     `json:"-" gorm:"type: int"`
+	FullName   string  `json:"fullname" gorm:"type: varchar(255)"`
+	Status     Status  `json:"status" gorm:"foreignKey:StatusID"`
+	RoleID     uint    `json:"-" gorm:"type: int"`
+	Role       Role    `json:"role" gorm:"foreignKey:RoleID"`
+	Profile    Profile `json:"profile"`
 }
 
 // function for handle not create new table users

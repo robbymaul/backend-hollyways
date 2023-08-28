@@ -5,7 +5,7 @@ import (
 	dtoUser "hollyways/dto/user"
 	"hollyways/models"
 	"hollyways/repositories"
-	"hollyways/utility"
+	"hollyways/utilities"
 	"html"
 	"net/http"
 	"strconv"
@@ -107,7 +107,7 @@ func (h *userHandler) UpdateUser(c *gin.Context) {
 	}
 
 	if request.FullName != "" {
-		validFullName, err := utility.ValidateInput(request.FullName)
+		validFullName, err := utilities.ValidateInput(request.FullName)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
 				Status:  http.StatusBadRequest,

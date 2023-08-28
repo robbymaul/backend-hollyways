@@ -6,7 +6,7 @@ import (
 	"hollyways/models"
 	jwtauth "hollyways/packages/jwt"
 	"hollyways/repositories"
-	"hollyways/utility"
+	"hollyways/utilities"
 	"log"
 	"net/http"
 	"strings"
@@ -45,7 +45,7 @@ func (h *handlerAuth) Register(c *gin.Context) {
 		return
 	}
 
-	emailValid, err := utility.ValidateAndSanitazeEmail(request.Email)
+	emailValid, err := utilities.ValidateAndSanitazeEmail(request.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
 			Status:  http.StatusBadRequest,
@@ -54,7 +54,7 @@ func (h *handlerAuth) Register(c *gin.Context) {
 		return
 	}
 
-	fullNameValid, err := utility.ValidateInput(request.FullName)
+	fullNameValid, err := utilities.ValidateInput(request.FullName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
 			Status:  http.StatusBadRequest,

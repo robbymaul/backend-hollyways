@@ -1,12 +1,11 @@
 package handlers
 
 import (
-	"fmt"
 	projectdto "hollyways/dto/project"
 	dtoResult "hollyways/dto/result"
 	"hollyways/models"
 	"hollyways/repositories"
-	"hollyways/utility"
+	"hollyways/utilities"
 	"html"
 	"net/http"
 	"strconv"
@@ -42,8 +41,8 @@ func (h *projectHandler) CreateProject(c *gin.Context) {
 	projectName := c.PostForm("projectName")
 	projectDescription := c.PostForm("projectDescription")
 	targetDonation, _ := strconv.Atoi(c.PostForm("target"))
-	startDate, _ := utility.ParseTime(c.PostForm("startDate"))
-	dueDate, _ := utility.ParseTime(c.PostForm("dueDate"))
+	startDate, _ := utilities.ParseTime(c.PostForm("startDate"))
+	dueDate, _ := utilities.ParseTime(c.PostForm("dueDate"))
 
 	request := projectdto.ProjectRequestDTO{
 		ProjectName:        projectName,
@@ -132,8 +131,6 @@ func (h *projectHandler) GetProject(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(projectId)
-
 	project, err := h.ProjectRepository.GetProject(projectId)
 	if err != nil {
 		if strings.Contains(err.Error(), "record not found") {
@@ -187,7 +184,7 @@ func (h *projectHandler) UpdateProjectByAdmin(c *gin.Context) {
 		return
 	}
 
-	dueDate, _ := utility.ParseTime(c.PostForm("dueDate"))
+	dueDate, _ := utilities.ParseTime(c.PostForm("dueDate"))
 
 	request := projectdto.ProjectUpdateRequestDTO{
 		ProjectName:        c.PostForm("projectName"),
