@@ -4,6 +4,7 @@ import (
 	dtoAuth "hollyways/dto/auth"
 	dtoResult "hollyways/dto/result"
 	"hollyways/models"
+	"hollyways/packages/bycript"
 	jwtauth "hollyways/packages/jwt"
 	"hollyways/repositories"
 	"hollyways/utilities"
@@ -63,9 +64,18 @@ func (h *handlerAuth) Register(c *gin.Context) {
 		return
 	}
 
+	password, err := bycript.HashingPassword(request.Password)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
+			Status:  http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
+
 	user := models.User{
 		Email:    emailValid,
-		Password: request.Password,
+		Password: password,
 		FullName: fullNameValid,
 		RoleID:   3,
 		StatusID: 1,
@@ -109,13 +119,21 @@ func (h *handlerAuth) Login(c *gin.Context) {
 		Password: request.Password,
 	}
 
-	user, err := h.AuthRepository.Login(user.Email, user.Password)
+	user, err := h.AuthRepository.Login(user.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
 			Status:  http.StatusBadRequest,
-			Message: "wrong email or password",
+			Message: "email not registered",
 		})
 		return
+	}
+
+	passwordValid := bycript.CheckPasswordHash(request.Password, user.Password)
+	if !passwordValid {
+		c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
+			Status:  http.StatusBadRequest,
+			Message: "wrong password",
+		})
 	}
 
 	claims := jwt.MapClaims{}

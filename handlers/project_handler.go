@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	projectdto "hollyways/dto/project"
 	dtoResult "hollyways/dto/result"
 	"hollyways/models"
@@ -38,6 +39,7 @@ func (h *projectHandler) CreateProject(c *gin.Context) {
 	}
 
 	dataFile, _ := c.Get("file")
+	fmt.Println("ini data file", dataFile)
 	projectName := c.PostForm("projectName")
 	projectDescription := c.PostForm("projectDescription")
 	targetDonation, _ := strconv.Atoi(c.PostForm("target"))

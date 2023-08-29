@@ -1,10 +1,13 @@
 package middleware
 
 import (
-	"io"
+	"context"
 	"net/http"
 	"os"
+	"path/filepath"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,68 +29,52 @@ func UploadFile() gin.HandlerFunc {
 			return
 		}
 
-		src, err := file.Open()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":  http.StatusInternalServerError,
-				"message": "Cant open file upload",
-			})
-			return
-		}
-		defer src.Close()
-
-		buf := make([]byte, 522)
-		_, err = src.Read(buf)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":  http.StatusInternalServerError,
-				"message": "file to large max 512kb",
-			})
-			return
+		// Check if the uploaded file has an allowed image extension
+		allowedExtensions := map[string]bool{
+			".jpg":  true,
+			".jpeg": true,
+			".png":  true,
+			".gif":  true,
+			".bmp":  true,
+			".webp": true,
 		}
 
-		mimeType := http.DetectContentType(buf)
-
-		allowedMIMETypes := map[string]bool{
-			"image/jpeg": true,
-			"image/png":  true,
-			"image/gif":  true,
-			"image/bmp":  true,
-			"image/webp": true,
-		}
-
-		if !allowedMIMETypes[mimeType] {
+		// Get the file extension
+		fileExtension := filepath.Ext(file.Filename)
+		if !allowedExtensions[fileExtension] {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status":  http.StatusBadRequest,
-				"message": "Unsuported file type",
+				"message": "Unsupported file extension",
 			})
 			c.Set("file", "")
 			c.Next()
 			return
 		}
 
-		tempFile, err := os.CreateTemp("uploads", "image-*.png")
+		src, err := file.Open()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"status":  http.StatusInternalServerError,
-				"message": "Cannot save file directory",
+				"message": "Can't open file upload",
 			})
 			return
 		}
-		defer tempFile.Close()
+		defer src.Close()
 
-		if _, err = io.Copy(tempFile, src); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":  http.StatusInternalServerError,
-				"message": "Cannot copy file to directory",
-			})
+		ctx := context.Background()
+		var CLOUDE_NAME = os.Getenv("CLOUDE_NAME")
+		var API_KEY = os.Getenv("API_KEY")
+		var API_SECRET = os.Getenv("API_SECRET")
+
+		cloudinary, _ := cloudinary.NewFromParams(CLOUDE_NAME, API_KEY, API_SECRET)
+
+		response, err := cloudinary.Upload.Upload(ctx, src, uploader.UploadParams{Folder: "hollyways"})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+			return
 		}
 
-		data := tempFile.Name()
-
-		fileName := data[8:]
-
-		c.Set("file", fileName)
+		c.Set("file", response.SecureURL)
 		c.Next()
 	}
 }

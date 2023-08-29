@@ -84,7 +84,7 @@ func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Transaction has been created, Please make the payment promptly.",
+		"message": "Transaction has been created, Please the payment promptly.",
 	})
 }
 
@@ -142,7 +142,7 @@ func (h *transactionHandler) GetTransaction(c *gin.Context) {
 		return
 	}
 
-	transactionId, err := strconv.Atoi(c.Param("idd"))
+	transactionId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, dtoResult.ErrorResult{
 			Status:  http.StatusBadRequest,

@@ -5,6 +5,10 @@ go 1.20
 require gorm.io/driver/mysql v1.5.1
 
 require (
+	github.com/cloudinary/cloudinary-go/v2 v2.4.0 // indirect
+	github.com/creasty/defaults v1.5.1 // indirect
+	github.com/google/uuid v1.2.0 // indirect
+	github.com/gorilla/schema v1.2.0 // indirect
 	github.com/midtrans/midtrans-go v1.3.7 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 )

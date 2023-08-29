@@ -18,14 +18,14 @@ func (r *repository) CreateTransaction(transaction models.Transaction) error {
 
 func (r *repository) FindTransaction() ([]models.Transaction, error) {
 	var transaction []models.Transaction
-	err := r.db.Preload("User").Preload("Project").Find(&transaction).Error
+	err := r.db.Preload("User").Preload("User.Profile").Preload("User.Status").Preload("User.Role").Preload("Project").Find(&transaction).Error
 
 	return transaction, err
 }
 
 func (r *repository) GetTransaction(id int) (models.Transaction, error) {
 	var transaction models.Transaction
-	err := r.db.Preload("User").Preload("Project").First(&transaction, "id = ?", id).Error
+	err := r.db.Preload("User").Preload("User.Profile").Preload("User.Status").Preload("User.Role").Preload("Project").First(&transaction, "id = ?", id).Error
 
 	return transaction, err
 }
